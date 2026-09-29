@@ -1,6 +1,6 @@
 # Sedona By Team AEGIS
 
-**LLM-assisted vendor risk assessment for new IT services — running on your own machine.**
+**LLM-assisted vendor risk assessment for new IT services — running on your own machine.**  
 
 Sedona reads a vendor-supplied HECVAT questionnaire, compares every control against your
 institution's approved policy documents, optionally weighs supporting evidence such as a SOC 2
