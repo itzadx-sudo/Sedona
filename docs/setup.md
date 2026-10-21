@@ -59,7 +59,8 @@ To install or check dependencies separately:
 ./scripts/bootstrap.sh --force
 ```
 
-`--check` returns 1 when components are missing and 0 when they are ready. `--force` reruns setup.
+`--check` returns 1 when components are missing and 0 when they are ready. `--force` clears setup
+markers and runs the checks again; components that already pass are kept.
 
 | Step | Linux | macOS |
 | --- | --- | --- |
@@ -69,5 +70,6 @@ To install or check dependencies separately:
 | Models | Downloads GGUF files | Pulls Ollama tags |
 | Frontend | Installs npm packages | Installs npm packages |
 
-Project dependencies are stored under `.runtime/`. Linux GGUF files are stored in `models/`.
-Ollama manages its own model storage under `~/.ollama`.
+The Python environment and Linux build tools are stored under `.runtime/`. Frontend packages are
+stored in `FRONTEND/node_modules/`, and Linux GGUF files in `models/`. Ollama manages its own
+model storage under `~/.ollama`.
