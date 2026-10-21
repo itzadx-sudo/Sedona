@@ -42,6 +42,10 @@ qa-local/
 docs/
 !/docs/
 /docs/*
+!/docs/setup.md
+!/docs/assessments.md
+!/docs/models.md
+!/docs/configuration.md
 !/docs/operations.md
 changes.md
 TEAM_GIT_SETUP.md

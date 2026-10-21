@@ -20,7 +20,7 @@ model can be selected with `SEDONA_LLM_MODEL`.
 
 1. Install the prerequisites above. For the default macOS model, run `ollama signin` once.
 2. Set the first administrator's username, password and display name using the account setup steps
-   in the operations guide. Sedona has no default login.
+   in the setup guide. Sedona has no default login.
 3. From the project folder, run:
 
    ```bash
@@ -62,7 +62,11 @@ PDF, PPTX and CSV downloads.
 
 ## Docs
 
-- [Setup and operations](docs/operations.md)
+- [Installation and first administrator](docs/setup.md)
+- [Accounts and assessments](docs/assessments.md)
+- [Models and data flow](docs/models.md)
+- [Ports, storage and environment variables](docs/configuration.md)
+- [Service commands and troubleshooting](docs/operations.md)
 
 Team Aegis (TD01): Aditya Jain, Fahadullah Ahamedullah, Ryan Alex, Sakina Shabbar,
 Saleh Khan and Izaan Shumaiz.
