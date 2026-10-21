@@ -54,7 +54,13 @@ Logs are stored in `logs/`. Sedona does not start or stop Ollama.
 
 ## Testing
 
-Both macOS and Linux passed our tests.
+Both macOS and Linux passed our tests. Testing checked application startup, model connectivity
+and normal operation with each platform's configured inference backend.
+
+| Platform | Tested setup | Result |
+| --- | --- | --- |
+| Linux | Ubuntu 20.04 LTS with an NVIDIA GPU and local llama.cpp inference | Passed |
+| macOS | macOS 27.0.1 on Apple Silicon, using Ollama 0.34.0 | Passed |
 
 ## Docs
 
