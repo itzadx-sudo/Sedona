@@ -442,6 +442,16 @@ if [[ "$MODE" == "restart-api" ]]; then
   exit 1
 fi
 
+# A host Python can satisfy the API checks while a new checkout has no frontend packages.
+# Complete macOS setup before selecting the interpreter or starting any services.
+if (( IS_MACOS )) && [[ ! -d "$FRONTEND_DIR/node_modules" ]] && [[ -x "$HERE/scripts/bootstrap.sh" ]]; then
+  warn "Frontend dependencies are missing — running first-time setup."
+  if ! bash "$HERE/scripts/bootstrap.sh"; then
+    fail "First-time setup did not complete; see the output above."
+    exit 1
+  fi
+fi
+
 resolve_pybin
 mkdir -p "$LOG_DIR"
 
