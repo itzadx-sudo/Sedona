@@ -38,8 +38,11 @@ CLAUDE.md
 # Local QA scaffolding — probes and harnesses, kept off the VM and out of git
 qa-local/
 
-# Dev documentation — kept locally and in ~/Documents/MD, off the deployment target
+# Dev documentation stays local; allow only the published guides linked from README.
 docs/
+!/docs/
+/docs/*
+!/docs/operations.md
 changes.md
 TEAM_GIT_SETUP.md
 .claude/
