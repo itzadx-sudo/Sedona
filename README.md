@@ -54,11 +54,7 @@ Logs are stored in `logs/`. Sedona does not start or stop Ollama.
 
 ## Testing
 
-Linux has been tested on the Ubuntu deployment. On 21 October 2026, the macOS workflow passed a
-296-control synthetic assessment, follow-up handling, report downloads and an API restart.
-
-A separate macOS demo folder also passed automatic setup, login, a six-control assessment and
-PDF, PPTX and CSV downloads.
+Both macOS and Linux passed our tests.
 
 ## Docs
 
