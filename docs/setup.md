@@ -6,7 +6,7 @@ Both platforms need Node.js 18+ with npm, curl and internet access during setup.
 
 | Platform | Additional requirements |
 | --- | --- |
-| Linux | NVIDIA GPU and driver. The tested deployment uses Ubuntu 20.04 LTS. |
+| Linux | NVIDIA GPU and driver. The Ubuntu deployment uses 20.04 LTS. |
 | macOS | Apple Silicon and a running Ollama daemon. |
 
 For Ollama Cloud models, sign in before starting Sedona:
