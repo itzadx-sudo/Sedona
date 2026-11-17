@@ -1,15 +1,22 @@
-# Sedona By Team AEGIS
+# Sedona
 
-Sedona checks vendor HECVAT answers against institutional policies and produces PDF, PPTX and
-CSV reports. Assessors can attach supporting PDFs, answer follow-up questions and review findings.
+Sedona helps IT teams turn a vendor security questionnaire into a risk assessment they can review and share. Team Aegis at Murdoch University Dubai built it for Murdoch University IT.
 
-Built for Murdoch University IT by Team Aegis, Murdoch University Dubai.
+## How it works
 
-![Sedona results dashboard showing the example risk score and findings by severity](./sedona-dashboard-results.jpg)
+### Upload the vendor questionnaire
 
-## Upload screen
+Enter the vendor’s name and upload their completed HECVAT security questionnaire. Add supporting PDFs if you need more evidence for the assessment.
 
-![Sedona’s document upload screen for vendor questionnaires and supporting files](./sedona-upload.jpg)
+![Sedona’s upload screen for the vendor questionnaire and supporting files](./sedona-upload.jpg)
+
+### Review the findings
+
+Sedona compares the vendor’s answers with the policies in its knowledge base. After answering or skipping follow-up questions, you can review the overall risk score and see which findings are most severe.
+
+![Sedona’s results dashboard showing an example risk score and findings grouped by severity](./sedona-dashboard-results.jpg)
+
+Export the assessment as a PDF, PowerPoint presentation, or CSV.
 
 ## Platforms
 
