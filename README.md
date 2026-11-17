@@ -5,6 +5,8 @@ CSV reports. Assessors can attach supporting PDFs, answer follow-up questions an
 
 Built for Murdoch University IT by Team Aegis, Murdoch University Dubai.
 
+![Sedona results dashboard showing the example risk score and findings by severity](./sedona-dashboard-results.jpg)
+
 ## Upload screen
 
 ![Sedona’s document upload screen for vendor questionnaires and supporting files](./sedona-upload.jpg)
