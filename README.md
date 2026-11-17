@@ -8,13 +8,13 @@ Sedona helps IT teams turn a vendor security questionnaire into a risk assessmen
 
 Enter the vendor’s name and upload their completed HECVAT security questionnaire.
 
-![Sedona’s upload screen for the vendor questionnaire and supporting files](./sedona-upload.jpg)
+![Sedona’s upload screen for the vendor questionnaire and supporting files](./docs/images/sedona-upload.jpg)
 
 ### Run the analysis
 
 Sedona checks the vendor’s answers against the policies in its knowledge base. The scan console shows which control it’s checking and how far the assessment has progressed.
 
-![Sedona’s Analysis loading screen with the scan console, current control, and progress grid](./sedona-analysis-loading.jpg)
+![Sedona’s Analysis loading screen with the scan console, current control, and progress grid](./docs/images/sedona-analysis-loading.jpg)
 
 Once the scan finishes, you can answer or skip follow-up questions and attach supporting PDFs as needed.
 
@@ -22,7 +22,7 @@ Once the scan finishes, you can answer or skip follow-up questions and attach su
 
 The results dashboard shows the overall risk score and groups findings by severity so you can see where to start.
 
-![Sedona’s results dashboard showing an example risk score and findings grouped by severity](./sedona-dashboard-results.jpg)
+![Sedona’s results dashboard showing an example risk score and findings grouped by severity](./docs/images/sedona-dashboard-results.jpg)
 
 ## Platforms
 
