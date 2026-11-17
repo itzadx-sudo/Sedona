@@ -24,8 +24,6 @@ The results dashboard shows the overall risk score and groups findings by severi
 
 ![Sedona’s results dashboard showing an example risk score and findings grouped by severity](./sedona-dashboard-results.jpg)
 
-Export the assessment as a PDF, PowerPoint presentation, or CSV.
-
 ## Platforms
 
 | Platform | Requirements | Default chat model |
