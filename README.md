@@ -10,11 +10,13 @@ Enter the vendor’s name and upload their completed HECVAT security questionnai
 
 ![Sedona’s upload screen for the vendor questionnaire and supporting files](./sedona-upload.jpg)
 
-### Clarify gaps in Analysis
+### Run the analysis
 
-Sedona compares the vendor’s answers with the policies in its knowledge base. Use the Gap Analysis screen to answer or skip follow-up questions and attach supporting PDFs as needed.
+Sedona checks the vendor’s answers against the policies in its knowledge base. The scan console shows which control it’s checking and how far the assessment has progressed.
 
-![Sedona’s Gap Analysis screen showing evidence uploads and an example follow-up question](./sedona-gap-analysis.jpg)
+![Sedona’s Analysis loading screen with the scan console, current control, and progress grid](./sedona-analysis-loading.jpg)
+
+Once the scan finishes, you can answer or skip follow-up questions and attach supporting PDFs as needed.
 
 ### Review the findings
 
