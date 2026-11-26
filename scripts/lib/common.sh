@@ -79,8 +79,15 @@ _config_value() {
   "$py" -c "import sys; sys.path.insert(0, '$PROJECT_ROOT/BACKEND'); import config; print(config.$1)" 2>/dev/null
 }
 
-ollama_llm_model()   { _config_value LLM_MODEL   || echo "${SEDONA_LLM_MODEL:-gemma4:31b-cloud}"; }
+ollama_llm_model()   { _config_value LLM_MODEL   || echo "${SEDONA_LLM_MODEL:-gemma3:4b}"; }
 ollama_embed_model() { _config_value EMBED_MODEL || echo "${SEDONA_EMBED_MODEL:-nomic-embed-text}"; }
+
+# Ollama Cloud tags (*-cloud / *:cloud) proxy prompts to ollama.com and are disabled.
+ollama_cloud_tag() {
+  local lower
+  lower="$(printf '%s' "${1%%@*}" | tr '[:upper:]' '[:lower:]')"
+  [[ "$lower" == *-cloud || "$lower" == *:cloud ]]
+}
 
 ollama_present() { need_cmd ollama; }
 
@@ -90,6 +97,7 @@ ollama_daemon_up() { ollama list >/dev/null 2>&1; }
 # ollama reports untagged models as "<name>:latest", so accept the bare name too
 ollama_model_present() {
   local want="$1"
+  ollama_cloud_tag "$want" && return 1
   ollama list 2>/dev/null | awk 'NR>1 {print $1}' | grep -qxF -e "$want" -e "$want:latest"
 }
 

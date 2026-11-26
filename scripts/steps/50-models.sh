@@ -4,8 +4,7 @@
 # llama_cpp — fetch the two GGUF files into the project's models/ folder. These are ~3.5 GB of
 #             weights, deliberately not in git or the submission zip. They are plain data:
 #             nothing here is compiled, and the same files work on CPU or GPU.
-# ollama    — ask the daemon to pull the two tags. A "*-cloud" tag is a few hundred bytes of
-#             manifest rather than gigabytes of weights: the model itself stays on ollama.com.
+# ollama    — ask the local daemon to pull the two local model tags into ~/.ollama.
 source "$(dirname "${BASH_SOURCE[0]}")/../lib/common.sh"
 
 STEP=models
@@ -14,6 +13,13 @@ STEP=models
 if using_ollama; then
   LLM_TAG="$(ollama_llm_model)"
   EMBED_TAG="$(ollama_embed_model)"
+
+  for _tag in "$LLM_TAG" "$EMBED_TAG"; do
+    if ollama_cloud_tag "$_tag"; then
+      die "refusing to pull '$_tag': Ollama Cloud models are disabled so assessment data stays on this machine.
+       Set SEDONA_LLM_MODEL (or LLM_MODEL in BACKEND/config.py) to a local Ollama tag such as gemma3:4b."
+    fi
+  done
 
   ollama_present || die "the 'ollama' command was not found.
        Install Ollama from https://ollama.com/download and re-run.
@@ -33,15 +39,7 @@ if using_ollama; then
       ok "$label ready: $tag"
       return 0
     fi
-    # A cloud tag resolves through your ollama.com account, so an unauthenticated daemon fails
-    # here with an error that does not name the actual fix.
-    case "$tag" in
-      *-cloud) die "could not pull '$tag'.
-       Cloud models need an ollama.com account. Run 'ollama signin' and re-run.
-       To stay entirely local instead, set LLM_MODEL in BACKEND/config.py to a local tag
-       such as gemma3:4b." ;;
-      *)       die "could not pull '$tag'. Check the tag name against 'ollama list'." ;;
-    esac
+    die "could not pull '$tag'. Check the tag name and network connection, or verify against 'ollama list'."
   }
 
   pull_tag "$LLM_TAG"   "chat model"
