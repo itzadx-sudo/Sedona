@@ -21,8 +21,8 @@ Frontend changes reload automatically. Backend and model-configuration changes n
 | --- | --- |
 | npm is missing | Install Node.js 18+ with npm |
 | Ollama is unreachable | Start Ollama.app or run `ollama serve` |
-| Model is missing | Run `ollama pull` with the configured tag |
-| Cloud model authentication fails | Run `ollama signin` |
+| Model is missing | Run `ollama pull` with the configured local tag |
+| Cloud model tag is rejected | Set `SEDONA_LLM_MODEL` to a local Ollama tag (e.g. `gemma3:4b`) |
 | Knowledge base is empty | Upload policies and the HECVAT template |
 | Python dependencies are missing | Run `./scripts/bootstrap.sh` |
 | Linux GPU is missing | Check the NVIDIA driver, or explicitly select CPU mode |

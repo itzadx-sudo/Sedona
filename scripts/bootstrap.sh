@@ -59,6 +59,12 @@ missing_steps() {
 echo
 log "Sedona bootstrap — everything installs under $RUNTIME_DIR"
 if using_ollama; then
+  if ollama_cloud_tag "$(ollama_llm_model)"; then
+    die "SEDONA_LLM_MODEL='$(ollama_llm_model)' targets Ollama Cloud, which is disabled so assessment data stays local (use a local tag such as gemma3:4b)"
+  fi
+  if ollama_cloud_tag "$(ollama_embed_model)"; then
+    die "SEDONA_EMBED_MODEL='$(ollama_embed_model)' targets Ollama Cloud, which is disabled so assessment data stays local"
+  fi
   # the weights are the daemon's, under ~/.ollama, not this folder's
   log "Inference backend: ollama (chat: $(ollama_llm_model) · embeddings: $(ollama_embed_model))"
   if ! ollama_present; then
