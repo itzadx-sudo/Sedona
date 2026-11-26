@@ -611,8 +611,7 @@ elif [[ "$LLM_BACKEND" == "ollama" ]]; then
   # own here — just say what to do.
   fail "Ollama is not answering on port $LLM_PORT."
   echo "  Start it (open Ollama.app, or run 'ollama serve'), then re-run ./start.sh."
-  echo "  First time on this machine, sign in and fetch the two models:"
-  echo "    ollama signin"
+  echo "  First time on this machine, fetch the two local models:"
   echo "    ollama pull $(read_cfg LLM_MODEL)"
   echo "    ollama pull $(read_cfg EMBED_MODEL)"
   exit 1

@@ -9,13 +9,7 @@ Both platforms need Node.js 18+ with npm, curl and internet access during setup.
 | Linux | NVIDIA GPU and driver. The Ubuntu deployment uses 20.04 LTS. |
 | macOS | Apple Silicon and a running Ollama daemon. |
 
-For Ollama Cloud models, sign in before starting Sedona:
-
-```bash
-ollama signin
-```
-
-Cloud models need internet during assessments. Local models run on the host after installation.
+Models run locally on the host after installation; Ollama Cloud models are disabled.
 
 ## First administrator
 
@@ -67,7 +61,7 @@ markers and runs the checks again; components that already pass are kept.
 | Python | Creates a project environment | Creates a project environment |
 | Packages | Installs backend dependencies | Installs backend dependencies |
 | Inference runtime | Installs CUDA and builds llama.cpp | Uses Ollama |
-| Models | Downloads GGUF files | Pulls Ollama tags |
+| Models | Downloads GGUF files | Pulls local Ollama tags |
 | Frontend | Installs npm packages | Installs npm packages |
 
 The Python environment and Linux build tools are stored under `.runtime/`. Frontend packages are

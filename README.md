@@ -29,15 +29,15 @@ The results dashboard shows the overall risk score and groups findings by severi
 | Platform | Requirements | Default chat model |
 | --- | --- | --- |
 | Linux | NVIDIA GPU and driver, Node.js 18+, npm, curl | Local `gemma-3-4b-it` through llama.cpp |
-| macOS | Apple Silicon, Node.js 18+, npm, Ollama running | `gemma4:31b-cloud` through Ollama |
+| macOS | Apple Silicon, Node.js 18+, npm, Ollama running | Local `gemma3:4b` through Ollama |
 
-On macOS, the default chat model sends control text, vendor answers and retrieved policy excerpts
-to Ollama Cloud. Document parsing, embeddings and the vector store run locally. A local Ollama
-model can be selected with `SEDONA_LLM_MODEL`.
+On both platforms, chat inference, document parsing, embeddings and the vector store run locally on
+the host. On macOS, a different local Ollama model can be selected with `SEDONA_LLM_MODEL`
+(Ollama Cloud tags are rejected so assessment data stays on the machine).
 
 ## Setup
 
-1. Install the prerequisites above. For the default macOS model, run `ollama signin` once.
+1. Install the prerequisites above.
 2. Set the first administrator's username, password and display name using the account setup steps
    in the setup guide. Sedona has no default login.
 3. From the project folder, run:
@@ -69,7 +69,7 @@ Logs are stored in `logs/`. Sedona does not start or stop Ollama.
 
 - June 2026: local Gemma inference and local embeddings through llama.cpp.
 - August 2026: Linux deployment and installer updates.
-- 29 September 2026: macOS support through Ollama, with cloud chat enabled by default.
+- 29 September 2026: macOS support through local Ollama.
 
 ## Testing
 

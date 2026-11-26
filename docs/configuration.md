@@ -31,7 +31,7 @@ Set configuration through environment variables. Available options are listed in
 | Variable | Setting |
 | --- | --- |
 | `SEDONA_LLM_BACKEND` | `llama_cpp` or `ollama`; selected by platform by default |
-| `SEDONA_LLM_MODEL` | Ollama chat model tag |
+| `SEDONA_LLM_MODEL` | Local Ollama chat model tag |
 | `SEDONA_EMBED_MODEL` | Embedding model tag |
 | `SEDONA_PYBIN` | Python interpreter |
 | `SEDONA_DATA_DIR` | Persistent data directory |

@@ -12,8 +12,7 @@ _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Which inference stack serves the two models.
 #   "llama_cpp" — two local llama.cpp servers on separate ports, launched by run_gpu.sh.
 #                 Needs an NVIDIA GPU and the CUDA build; this is the Linux deployment.
-#   "ollama"    — one local Ollama daemon serving both. A signed-in daemon resolves "*-cloud"
-#                 model tags against ollama.com, so this is also how macOS reaches Ollama Cloud.
+#   "ollama"    — one local Ollama daemon serving both models locally on macOS.
 # Defaulting by platform means neither OS needs configuring, and Linux reaches every value below
 # through exactly the same branch it always did.
 LLM_BACKEND = os.environ.get(
@@ -81,26 +80,40 @@ EMBED_SERVER_URL = os.environ.get(
 
 N_GPU_LAYERS = -1          # -1 = push every layer onto the gpu, nothing stays on cpu (llama_cpp only)
 
+def is_ollama_cloud_tag(tag: str) -> bool:
+    base = str(tag or "").strip().lower().split("@", 1)[0]
+    return base.endswith(("-cloud", ":cloud"))
+
+
 # llama.cpp ignores the "model" field, so under that backend these are display labels only.
-# Under the ollama backend they are the tags Ollama actually resolves.
+# Under the ollama backend they are the local tags Ollama actually resolves.
 #
 #   ── CHANGE THE MODEL BY EDITING THE LLM_MODEL LINE BELOW ──
 #
-# Any tag `ollama list` reports works. Tags ending in "-cloud" run on Ollama Cloud (the daemon
-# proxies them to ollama.com, so prompt content leaves this machine); everything else runs
-# locally on Metal. Known-good choices:
-#   gemma4:31b-cloud    cloud, Gemma lineage — the default, closest to what SYSTEM_PROMPT was tuned on
-#   gpt-oss:120b-cloud  cloud, strongest; keeps its reasoning in a separate field, so parsing is unaffected
+# Any local tag `ollama list` reports works; Ollama Cloud tags (*-cloud / *:cloud) are rejected
+# so prompt content never leaves this machine. Known-good local choices on Apple Silicon:
+#   gemma3:4b           default — local, the same weights the Linux deployment serves
 #   gemma4:e4b-mlx      local, Apple Silicon
-#   gemma3:4b           local, the same weights the Linux deployment serves
 LLM_MODEL   = os.environ.get(
     "SEDONA_LLM_MODEL",
-    "gemma4:31b-cloud" if _OLLAMA else "gemma-3-4b-it",
+    "gemma3:4b" if _OLLAMA else "gemma-3-4b-it",
 )
 # same f16 nomic-embed-text-v1.5 weights either way, and embed.py adds the search_query: /
 # search_document: prefixes itself on both — so a chroma_db built under one backend is readable
 # under the other
 EMBED_MODEL = os.environ.get("SEDONA_EMBED_MODEL", "nomic-embed-text")
+
+if _OLLAMA:
+    for _env_name, _model_tag in (
+        ("SEDONA_LLM_MODEL", LLM_MODEL),
+        ("SEDONA_EMBED_MODEL", EMBED_MODEL),
+    ):
+        if is_ollama_cloud_tag(_model_tag):
+            raise RuntimeError(
+                f"{_env_name}={_model_tag!r} targets Ollama Cloud, which is disabled on macOS "
+                "so assessment data stays on this machine. Use a local Ollama model tag "
+                "(for example 'gemma3:4b')."
+            )
 
 # anchored to the project root, never the cwd — launching from a different folder used to
 # split sessions across two reports/ directories
@@ -161,7 +174,7 @@ INSTITUTIONAL_APPLICABILITY = {
 
 # ceiling for the current GPU vram budget — check headroom before raising.
 # A llama.cpp launch flag only: run_gpu.sh passes it as --n_ctx. Ollama sets context per model
-# server-side (gemma4:31b-cloud reports 131k), so this value is inert under the ollama backend.
+# in its own daemon/Modelfile configuration, so this value is inert under the ollama backend.
 LLM_NUM_CTX = 6144
 CONSISTENCY_RUNS = 1
 CONSISTENCY_TEMPERATURE = float(os.environ.get("SEDONA_CONSISTENCY_TEMPERATURE", "0.1"))

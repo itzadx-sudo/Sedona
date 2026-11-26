@@ -11,8 +11,8 @@ import config
 
 _RUN_GPU_SH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "run_gpu.sh")
 
-# under the ollama backend there is nothing to compile, launch or supervise per-model: one daemon
-# serves both, and *-cloud tags are proxied to ollama.com by the daemon itself
+# under the ollama backend there is nothing to compile, launch or supervise per-model: one local
+# daemon serves both chat and embeddings
 _OLLAMA = config.LLM_BACKEND == "ollama"
 
 _proc: subprocess.Popen | None = None   # the session leader we may own (run_gpu.sh, or ollama serve)
@@ -34,19 +34,26 @@ def _both_up() -> bool:
 
 # A daemon that is up but missing the tag answers /v1/models with a healthy 200 and then fails
 # every single control, one full timeout at a time. Ask what it actually has.
-def _ollama_tags(timeout: float = 3.0) -> set[str]:
+def _ollama_tags(timeout: float = 3.0) -> tuple[set[str], set[str]]:
     url = f"http://{config.LLM_SERVER_HOST}:{config.LLM_SERVER_PORT}/api/tags"
     with urllib.request.urlopen(url, timeout=timeout) as resp:
         data = json.loads(resp.read().decode("utf-8"))
-    names: set[str] = set()
+    local_names: set[str] = set()
+    cloud_names: set[str] = set()
     for entry in data.get("models", []):
         name = entry.get("name") or entry.get("model") or ""
         if not name:
             continue
-        names.add(name)
+        if entry.get("remote_model") or entry.get("remote_host") or config.is_ollama_cloud_tag(name):
+            cloud_names.add(name)
+            if name.endswith(":latest"):
+                cloud_names.add(name[:-7])
+            continue
+        local_names.add(name)
         # ollama reports "nomic-embed-text:latest"; config may name it "nomic-embed-text"
-        names.add(name.split(":", 1)[0])
-    return names
+        if name.endswith(":latest"):
+            local_names.add(name[:-7])
+    return local_names, cloud_names
 
 
 def service_status() -> dict:
@@ -61,14 +68,20 @@ def service_status() -> dict:
         return status
 
     try:
-        tags = _ollama_tags()
+        tags, cloud_tags = _ollama_tags()
     except Exception:
         return status  # the probe is a refinement, never a reason to report a healthy port as down
 
     for key in ("llm", "embeddings"):
         model = status[key]["model"]
-        status[key]["model_present"] = model in tags
-        if not status[key]["model_present"]:
+        is_cloud = model in cloud_tags or f"{model}:latest" in cloud_tags or config.is_ollama_cloud_tag(model)
+        status[key]["model_present"] = (model in tags) and not is_cloud
+        if is_cloud:
+            status[key]["reachable"] = False
+            status[key]["error"] = (
+                f"model '{model}' targets Ollama Cloud, which is disabled — select a local model"
+            )
+        elif not status[key]["model_present"]:
             status[key]["reachable"] = False
             status[key]["error"] = f"model '{model}' is not pulled — run: ollama pull {model}"
     return status
@@ -162,8 +175,8 @@ def _ensure_ollama(wait_timeout: int) -> None:
     if not exe:
         raise RuntimeError(
             f"Ollama is not running on port {config.LLM_SERVER_PORT} and the `ollama` command was "
-            "not found. Install it from https://ollama.com/download, then run `ollama signin` to "
-            "enable the cloud models."
+            "not found. Install it from https://ollama.com/download and pull the configured local "
+            "models."
         )
 
     print("▶ Starting the Ollama daemon (ollama serve) …")
@@ -200,11 +213,13 @@ def _ensure_ollama(wait_timeout: int) -> None:
 # tag is reported at launch rather than discovered one failed control at a time.
 def warn_missing_models() -> None:
     try:
-        tags = _ollama_tags()
+        tags, cloud_tags = _ollama_tags()
     except Exception:
         return
     for model in (config.LLM_MODEL, config.EMBED_MODEL):
-        if model not in tags:
+        if model in cloud_tags or f"{model}:latest" in cloud_tags or config.is_ollama_cloud_tag(model):
+            print(f"⚠ model '{model}' targets Ollama Cloud, which is disabled — select a local model")
+        elif model not in tags:
             print(f"⚠ model '{model}' is not pulled — run: ollama pull {model}")
 
 
